@@ -32,12 +32,14 @@ def chap02_13(infile1, infile2, outfile):
     return
 
 
-def chap02_14(s):
-    pass
+def chap02_14(infile, n):
+    with open(infile, 'r') as rh:
+        return "".join([rh.readline() for i in range(n)])
 
 
-def chap02_15(s):
-    pass
+def chap02_15(infile, n):
+    with open(infile, 'r') as rh:
+        return "".join(rh.readlines()[-n:])
 
 
 def chap02_16(s):

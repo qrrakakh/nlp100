@@ -94,11 +94,15 @@ class TestChap02(unittest.TestCase):
 
 
     def test_14(self):
-        self.assertEqual(chap02.chap02_14(None), "")
+        n = 3
+        self.assertEqual(chap02.chap02_14(self.data, n),
+                         subprocess.check_output(["head", "-"+str(n), self.data]).decode('utf-8'))
 
 
     def test_15(self):
-        self.assertEqual(chap02.chap02_15(None), "")
+        n = 3
+        self.assertEqual(chap02.chap02_15(self.data, n),
+                         subprocess.check_output(["tail", "-"+str(n), self.data]).decode('utf-8'))
 
 
     def test_16(self):
