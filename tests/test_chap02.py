@@ -106,16 +106,45 @@ class TestChap02(unittest.TestCase):
 
 
     def test_16(self):
-        self.assertEqual(chap02.chap02_16(None), "")
+        n = 5
+        prefix="./temp/test16_exp"
+        exp_arg = ["split", "-l",
+                   "$(expr \\( $(wc -l "+self.data+" | cut -f1 -d\' \') + "+str(n)+" - 1 \\) / "+str(n)+")",
+                   self.data, prefix]
+        subprocess.call(" ".join(exp_arg), shell=True)
+
+        expected = []
+        flg=False
+        for i in range(0,26):
+            for j in range(0,26):
+                postfix=chr(97+i)+chr(97+j)
+                exp_file = prefix + postfix
+                if os.path.exists(exp_file):
+                    with open(exp_file, 'r') as rh:
+                        expected.append("".join(rh.readlines()))
+                    os.remove(exp_file)
+                else:
+                    flg = True
+                    break
+            if flg:
+                break
+        self.assertEqual(chap02.chap02_16(self.data, n, prefix), expected)
 
 
     def test_17(self):
-        self.assertEqual(chap02.chap02_17(None), "")
+        expected = list(filter(lambda s: s != '',
+                               subprocess.check_output("cat "+self.data+" | cut -f1 | sort | uniq",
+                                                       shell = True).decode('utf-8').split('\n')))
+        self.assertListEqual(chap02.chap02_17(self.data), expected)
 
 
     def test_18(self):
-        self.assertEqual(chap02.chap02_18(None), "")
+        expected = subprocess.check_output(("sort -s -k3,3 "+self.data), shell=True).decode('utf-8')
+        self.assertEqual(chap02.chap02_18(self.data), expected)
 
 
     def test_19(self):
-        self.assertEqual(chap02.chap02_19(None), "")
+        expected = subprocess.check_output(
+            "cut -f1 "+self.data+"  | sort | uniq -c | sort -nsrk1,1 | sed -e 's/^.*\s//g'",
+            shell=True).decode('utf-8')
+        self.assertEqual(chap02.chap02_19(self.data), expected)
